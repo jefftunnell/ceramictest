@@ -14,3 +14,23 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: 'georgia';
+  src: url('../assets/fonts/GEORGIA.TTF');
+}
+
+@font-face {
+  font-family: 'poppins';
+  src: url('../assets/fonts/Poppins-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'poppins_bold';
+  src: url('../assets/fonts/Poppins-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'poppins_semibold';
+  src: url('../assets/fonts/Poppins-SemiBold.ttf');
+}

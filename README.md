@@ -2,6 +2,9 @@
 
 Find your insight to make the world better.
 
+### Find, Act, Change
+### 发现、行动、改变
+
 - Learn what you are really interested in, be diligent and focus on this knowledge. Get achievements and rewards. Improve your life, and change the world.
 - 学习真正感兴趣的东西，精进、专注这个知识，获得成就和报酬，改善生活，改变世界。
 
