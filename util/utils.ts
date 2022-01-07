@@ -49,3 +49,15 @@ export function formatTime(timestamp: any) {
 export function backTop() {
   window.scrollTo(0, 0);
 }
+
+export const chainName = new Map([
+  [1, "ETH Mainnet"],
+  [3, "ETH Ropsten"],
+  [4, "ETH Rinkeby"],
+  [5, "ETH Goerli"],
+  [42, "ETH Kovan"],
+  [56, "BSC Mainnet"],
+  [65, "OKExChain Testnet"],
+  [80001, "Polygon Testnet"],
+  [97, "BSC Testnet"],
+]);

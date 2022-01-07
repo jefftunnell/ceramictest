@@ -5,8 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUpdate } from "react-use";
 import { PageHead } from "../components/Common";
-import Header, { currUserAccount } from "../components/Header";
-import { JUMP_TO } from "../util/consts";
+import Header from "../components/Header";
+import { web3Provider } from "../util/connectors";
+import { connected, JUMP_TO } from "../util/consts";
+import { EventSubscribe } from "../util/EventEmiter";
+import { selectedAccount, web3 } from "../util/web3Modal";
 
 let addressList: any = [];
 
@@ -18,11 +21,25 @@ const Home: NextPage = (props: any) => {
   const [isDisplayRank, setIsDisplayRank] = useState('flex');
 
   useEffect(() => {
+    console.log("--> Home : selectedAccount : ", selectedAccount);
+
     addressList = [];
-    getAddress();
-  }, []);
+    
+    if (web3) {
+      getAddress();
+    }
+  }, [selectedAccount]);
+
+  EventSubscribe(connected, (data: any) => {
+    update();
+  }, "Home");
 
   async function getAddress() {
+
+    // test code
+    // let resp = await web3.eth.getBlock(36668);
+    // console.log('--> PUNKS - tx info : ', resp);
+
     let result = await apiAddress();
     // console.info('--> getAddress = ', result);
 
@@ -43,9 +60,12 @@ const Home: NextPage = (props: any) => {
   // ROOT
   return (
     <Flex direction='column'>
-      {/* {PageHead(router)} */}
       <Center>
-        {/* {oneActivity(data)} */}
+        <Link href='/Template'>
+          <Text color='blue' cursor='pointer' fontSize={'2xl'}>
+            Go to second page
+          </Text>
+        </Link>
       </Center>
     </Flex>
   )

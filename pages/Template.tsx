@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUpdate } from "react-use";
-import { PageHead } from "../components/Common";
-import Header, { currUserAccount } from "../components/Header";
-import { JUMP_TO } from "../util/consts";
+import { Footer, PageHead } from "../components/Common";
+import Header from "../components/Header";
+import { connected, JUMP_TO } from "../util/consts";
+import { EventSubscribe } from "../util/EventEmiter";
+import { onReconnect, selectedAccount, web3 } from "../util/web3Modal";
 
 let addressList: any = [];
 
@@ -18,9 +20,20 @@ const Template: NextPage = (props: any) => {
   const [isDisplayRank, setIsDisplayRank] = useState('flex');
 
   useEffect(() => {
+    console.log("--> Template : selectedAccount : ", selectedAccount);
+    
     addressList = [];
-    getAddress();
-  }, []);
+    
+    onReconnect();
+
+    if (web3) {
+      getAddress();
+    }
+  }, [selectedAccount]);
+
+  EventSubscribe(connected, (data: any) => {
+    update();
+  }, "Template");
 
   async function getAddress() {
     let result = await apiAddress();
@@ -42,11 +55,14 @@ const Template: NextPage = (props: any) => {
 
   // ROOT
   return (
-    <Flex direction='column'>
+    <Flex direction='column' minHeight='100vh'>
       {PageHead(router)}
       <Center>
-        {/* {oneActivity(data)} */}
+        <Text fontSize={'2xl'}>
+          This a page
+        </Text>
       </Center>
+      <Footer />
     </Flex>
   )
 }

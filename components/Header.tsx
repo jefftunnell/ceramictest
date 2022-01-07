@@ -8,16 +8,8 @@ import {
 } from "@chakra-ui/react"
 import { ChevronDownIcon, HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
 import { MdAccountBalanceWallet, MdAccountCircle } from "react-icons/md"
-// import iconMetamask from '../assets/iconMetamask.svg';
-// import iconWalletConnect from '../assets/iconWalletConnect.svg';
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-import { chain_id_eth, ethersProvider, getNewWalletConnectInstance, injected, walletconnect } from '../util/connectors';
-import {
-  key_curr_wallect_index, key_curr_user_account, kMetamaskConnection, useEagerConnect,
-  useInactiveListener
-} from '../util/hooks';
-import { AbstractConnector } from '@web3-react/abstract-connector';
+// import { Web3Provider } from '@ethersproject/providers';
+// import { chain_id_eth, ethersProvider, getNewWalletConnectInstance, injected, walletconnect } from '../util/connectors';
 import Web3 from 'web3';
 import Flags from 'country-flag-icons/react/3x2'
 import setLanguage from 'next-translate/setLanguage'
@@ -55,27 +47,13 @@ import { EventDispatch, EventSubscribe } from '../util/EventEmiter';
 import { AiFillTwitterCircle } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { doVisit, getUserInfo, searchLootByLootId } from '../util/data/api';
-import { CN, COLOR_BG_BODY, COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, EN, COLOR_GRAY } from '../util/consts';
+import { CN, COLOR_BG_BODY, COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, EN, COLOR_GRAY, connected } from '../util/consts';
 import { addressToEns, shortAddress } from '../util/utils';
 import { useRouter } from 'next/router';
+import { useUpdate } from 'react-use';
+import { onConnect, onDisconnect, selectedAccount } from '../util/web3Modal';
 
 let search_loot_id: any;
-
-export var currChainId = chain_id_eth;
-export var currUserAccount: any;
-export var currUserAccountSigner: any;
-
-export const chainName = new Map([
-  [1, "ETH Mainnet"],
-  [3, "ETH Ropsten"],
-  [4, "ETH Rinkeby"],
-  [5, "ETH Goerli"],
-  [42, "ETH Kovan"],
-  [56, "BSC Mainnet"],
-  [65, "OKExChain Testnet"],
-  [80001, "Polygon Testnet"],
-  [97, "BSC Testnet"],
-]);
 
 export default function Header(props: any) {
 
@@ -93,21 +71,9 @@ export default function Header(props: any) {
   const [inPage, setInPage] = useState(0);
 
   const router = useRouter();
-  
+  const update = useUpdate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const context = useWeb3React<Web3Provider>();
-  const { connector, library, account, activate, deactivate, chainId } = context;
-
-  // console.info('chainId = ', chainId);
-  // console.info('currUserAccount: ', currUserAccount);
-  // console.info('currUserAccountSigner: ', currUserAccountSigner);
-
-  if (chainId) {
-    currChainId = chainId;
-  } else {
-    currChainId = 0;
-  }
 
   //
   function onOpenMenu() {
@@ -123,131 +89,67 @@ export default function Header(props: any) {
   const [balance, setBalance] = useState();
   // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isMobile = false;
+
   /**
    * with built-in broswer of wallet app.
    */
-  const checkBuiltInBrowser = async () => {
+  // const checkBuiltInBrowser = async () => {
 
-    // Be using built-in broswer
-    if (isMobile && (window as Record<string, any>).ethereum) {
-      const web3 = new Web3(Web3.givenProvider);
-      const address = await web3.eth.requestAccounts();
-      currUserAccount = address[0];
+  //   // Be using built-in broswer
+  //   if (isMobile && (window as Record<string, any>).ethereum) {
+  //     const web3 = new Web3(Web3.givenProvider);
+  //     const address = await web3.eth.requestAccounts();
+  //     // currUserAccount = address[0];
 
-      if (library !== undefined && currUserAccount !== undefined && currUserAccount !== null) {
-        currUserAccountSigner = library.getSigner(currUserAccount).connectUnchecked();
-        // localStorage.setItem(key_curr_user_account, currUserAccount);
-      }
+  //     // Get balance of the address
+  //     // const balance = await web3.eth.getBalance(currUserAccount);
+  //     // myBalance = formatEther(balance);
+  //     // setBalance(myBalance);
 
-      // Get balance of the address
-      // const balance = await web3.eth.getBalance(currUserAccount);
-      // myBalance = formatEther(balance);
-      // setBalance(myBalance);
+  //   } else { // On desktop or mobile independent browser
 
-    } else { // On desktop or mobile independent browser
+  //   }
+  // }
 
-      if (library !== undefined && account !== undefined && account !== null) {
-        currUserAccount = account;
-        currUserAccountSigner = library.getSigner(account).connectUnchecked();
-        // localStorage.setItem(key_curr_user_account, account);
-      } else {
-        currUserAccount = undefined;
-        currUserAccountSigner = ethersProvider;
-        // localStorage.removeItem(key_curr_user_account);
-      }
-    }
-  }
+  // checkBuiltInBrowser();
 
-
-  checkBuiltInBrowser();
-  // initContractObj(true);
-
-
-  const [activatingConnector, setActivatingConnector] = React.useState();
-
-  useEffect(() => {
-    if (activatingConnector && activatingConnector === connector) {
-      setActivatingConnector(undefined);
-    }
-  }, [connector, chainId, account, currUserAccount]);
-
-  if (connector !== undefined) {
-    if (connector === injected) {
-      // localStorage.setItem(kMetamaskConnection, "0");
-    } else {
-      // localStorage.setItem(key_curr_wallect_index, "1");
-    }
-  }
 
   async function getENS(address: string) {
-    let ens = await addressToEns(address);
+    // So slow, need to find new method.
+    // let ens = await addressToEns(address);
+    let ens = shortAddress(address);
     setEnsName(ens);
   }
 
   useEffect(() => {
-    if (currUserAccount !== undefined) {
-      getUserInfo(currUserAccount, setUserAvatar, setUserNickname, setDefaultPhoto, setIsDisplayPFP);
+    console.info('--> Header: selectedAccount: ', selectedAccount);
+
+    if (selectedAccount) {
+      getUserInfo(selectedAccount, setUserAvatar, setUserNickname, setDefaultPhoto, setIsDisplayPFP);
 
       // get ens name
-      getENS(currUserAccount);
+      getENS(selectedAccount);
 
       // TODO After first login, prompt user to update avatar and username
       // router.push('/Profile');
       // router.push('/Search');
     }
 
-    // let page = window.location.hash;
-    // // console.info('getCurrentLocation',page)
-    // if (page.indexOf("home") !== -1) { // in home
-    //   setInPage(1);
-    // } else if (page.indexOf("mypage") !== -1) { // in mypage
-    //   setInPage(2);
-    // } else {
-    //   setInPage(0);
-    // }
-  }, [currUserAccount]);
+  }, [selectedAccount]);
 
-  const triedEager = useEagerConnect()
-  useInactiveListener(!triedEager || !!activatingConnector);
+  EventSubscribe(connected, (data: any) => {
+    update();
+  }, "Header");
 
-  function onClickWallet(params: number, deactivate: Function, activate: Function,
-    activatingConnector: AbstractConnector | undefined, setActivatingConnector: Function) {
-
-    // console.info(params, activatingConnector);
-    if (params === 0) { // MetaMask
-      if (activatingConnector !== injected) {
-        if (activatingConnector !== undefined) {
-          // deactivate();
-          // walletconnect.close();
-        }
-
-        activate(injected);
-        setActivatingConnector(injected);
-        // localStorage.setItem(kMetamaskConnection, params.toString());
-      }
-    }
-
-    if (params === 1) { // WalletConnect
-      if (activatingConnector !== walletconnect) {
-        if (activatingConnector !== undefined) {
-          // deactivate();
-        }
-
-        try {
-          getNewWalletConnectInstance();
-          activate(walletconnect);
-          setActivatingConnector(walletconnect);
-          // localStorage.setItem(key_curr_wallect_index, params.toString());
-        } catch (error) {
-
-        }
-      }
-    }
-  }
+  EventSubscribe('disconnect', (data: any) => {
+    console.log("--> disconnect - selectedAccount : ", selectedAccount);
+    update();
+  }, "Header");
 
   const defaultRef = React.useRef() as any;
   const onCloseChoose = () => setIsOpenChoose(false);
-  const ChooseLootType = (
+
+  const SearchPrompt = (
     <AlertDialog
       isOpen={isOpenChoose}
       leastDestructiveRef={defaultRef}
@@ -296,54 +198,16 @@ export default function Header(props: any) {
     </AlertDialog>
   )
 
-  function ConnectWalletModal() {
-    return (
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <Flex
-              onClick={() => { onClickWallet(0, deactivate, activate, activatingConnector, setActivatingConnector); onClose() }}
-              align="center"
-              p={{ base: 4, md: 4 }}
-              cursor="pointer"
-              _hover={{ bg: 'gray.100', borderRadius: "0.5rem" }}
-            >
-
-              <Image src='/iconMetamask.svg' w="3rem" />
-              <Text color='black' fontSize="xl" fontWeight="bold" px={10}>MetaMask</Text>
-            </Flex>
-
-            <Divider color="#DAE3F0" my={4} />
-
-            <Flex
-              onClick={() => { onClickWallet(1, deactivate, activate, activatingConnector, setActivatingConnector); onClose() }}
-              // onClick={() => { connectWallet(); onClose() }}
-              align="center"
-              p={{ base: 4, md: 4 }}
-              cursor="pointer"
-              _hover={{ bg: 'gray.100', borderRadius: "0.5rem" }}
-            >
-
-              <Image src='/iconWalletConnect.svg' w="3rem" />
-              <Text color='black' fontSize="xl" fontWeight="bold" px={10}>WalletConnect</Text>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    )
-  }
-
-  EventSubscribe('upload_avatar', (data: any) => {
-    getUserInfo(currUserAccount, setUserAvatar, setUserNickname, setDefaultPhoto, setIsDisplayPFP);
-  }, "Header");
-
   function BeforeConnect() {
     return (
-      <Button w='100%' h={['3.3rem', '2.6rem']} onClick={() => { onOpen(); onCloseMenu() }}
+      <Button w='100%' h={['3.3rem', '2.6rem']} onClick={onConnect}
         px={5} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
         Connect Wallet
       </Button>
+      // <Button w='100%' h={['3.3rem', '2.6rem']} onClick={() => { onOpen(); onCloseMenu() }}
+      //   px={5} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
+      //   Connect Wallet
+      // </Button>
     )
   }
 
@@ -382,7 +246,7 @@ export default function Header(props: any) {
           {menuItem('Profile', openProfile)}
           {menuItem('Message', openMessage)}
           {menuItem('Setting', openSetting)}
-          {menuItem('Log out', '')}
+          {menuItem('Log out', onDisconnect)}
         </MenuList>
       </Menu>
 
@@ -433,7 +297,7 @@ export default function Header(props: any) {
         const result = Web3.utils.toChecksumAddress(input);
 
         if (result) {
-          if (result === currUserAccount) {
+          if (result === selectedAccount) {
             toastInfo(toast, 'Same address to current user logined.');
             return;
           }
@@ -442,7 +306,7 @@ export default function Header(props: any) {
           if (window.location.href.indexOf("friend_page") > 0) {
             EventDispatch("search_address", result);
           }
-          doVisit(currUserAccount, result);
+          doVisit(selectedAccount, result);
           window.location.assign('#/?friend_page');
         }
       } catch (error: any) {
@@ -528,7 +392,7 @@ export default function Header(props: any) {
   return (
     <div>
       <Flex d={['none', 'flex']} bg={COLOR_BG_BODY} pos="fixed" w="100%" zIndex={88}
-        justify="space-between" align="center" px={10} py={5} 
+        justify="space-between" align="center" px={10} py={5}
         borderBottomColor='#E9E9E9' borderBottomWidth='1px'>
 
         <Flex align="center">
@@ -555,7 +419,7 @@ export default function Header(props: any) {
             />
           </InputGroup>
 
-          {ChooseLootType}
+          {SearchPrompt}
         </Flex>
 
         <Flex align="center">
@@ -590,8 +454,7 @@ export default function Header(props: any) {
           </Text>
 
           <Flex>
-            {currUserAccount === undefined ? <BeforeConnect /> : <AfterConnect />}
-            <ConnectWalletModal />
+            {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
           </Flex>
 
           {/* {SocialMedia("https://twitter.com/LootSwag", FaTwitterSquare)}
@@ -601,7 +464,7 @@ export default function Header(props: any) {
       </Flex>
 
       {/* FOR MOBILE */}
-      <Flex d={['flex', 'none']} bg='#111111' pos="fixed" w="100%" zIndex={88}
+      <Flex d={['flex', 'none']} pos="fixed" w="100%" zIndex={88}
         justify="space-between" align="center" px={8} py={5} boxShadow="md">
 
         {/* <Link to="/">
@@ -619,7 +482,7 @@ export default function Header(props: any) {
           size="full"
         >
           <DrawerOverlay />
-          <DrawerContent mt='5.8rem' bg='#1A1A1A'>
+          <DrawerContent mt='5.8rem'>
             <DrawerCloseButton />
             {/* <DrawerHeader>Create your account</DrawerHeader> */}
 
@@ -657,8 +520,7 @@ export default function Header(props: any) {
               <Divider />
 
               <Flex mt='3rem'>
-                {currUserAccount === undefined ? <BeforeConnect /> : <AfterConnect />}
-                <ConnectWalletModal />
+                {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
               </Flex>
             </DrawerBody>
 

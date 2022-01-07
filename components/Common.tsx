@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { MdChat, MdFavoriteBorder, MdRedo, MdShare } from "react-icons/md";
-import Header, { currUserAccount } from "./Header";
+import Header from "./Header";
 import {
   COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, GRAY_TXT, HOVER_TITLE_1,
   HOVER_TITLE_2, HOVER_TITLE_3, HOVER_TITLE_4, JUMP_TO} from "../util/consts";
@@ -15,6 +15,7 @@ import { FaTwitterSquare } from "react-icons/fa";
 import { BsDiscord } from "react-icons/bs";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { FcLike } from "react-icons/fc";
+import { selectedAccount } from "../util/web3Modal";
 
 export const PAGE_SIZE = 10;
 
@@ -323,7 +324,7 @@ export function SkeletonUI(isDisplay: string) {
 
 export function oneVisitor(key: number, data: any) {
   let address = data.visitor_address;
-  if (currUserAccount === address) {
+  if (selectedAccount === address) {
     return (
       <div>
         {oneVisitorUI(key, data, true)}
@@ -363,7 +364,7 @@ export function oneVisitorUI(key: number, data: any, is_you?: boolean) {
 export function playerNickname(address: string, nickname: string) {
   return (
     <div>
-      {currUserAccount !== address ?
+      {selectedAccount !== address ?
         <Link href={`/player/${address}`}>
           <Tooltip label={JUMP_TO} fontSize="md" color="gray">
             <Text color='#0798F8' mb={1}>

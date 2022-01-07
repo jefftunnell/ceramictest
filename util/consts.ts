@@ -16,3 +16,6 @@ export const CONN_WALLET = 'Please connect to wallet.';
 // languages
 export const EN = 'English';
 export const CN = '简体中文';
+
+// events
+export const connected = 'connected';
