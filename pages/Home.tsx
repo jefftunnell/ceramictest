@@ -21,6 +21,7 @@ const Home: NextPage = (props: any) => {
   const [isDisplayRank, setIsDisplayRank] = useState('flex');
 
   useEffect(() => {
+    console.log("--> Home : web3 : ", web3);
     console.log("--> Home : selectedAccount : ", selectedAccount);
 
     addressList = [];
@@ -37,8 +38,8 @@ const Home: NextPage = (props: any) => {
   async function getAddress() {
 
     // test code
-    // let resp = await web3.eth.getBlock(36668);
-    // console.log('--> PUNKS - tx info : ', resp);
+    let resp = await web3.eth.getBlock(36668);
+    console.log('--> PUNKS - tx info : ', resp);
 
     let result = await apiAddress();
     // console.info('--> getAddress = ', result);

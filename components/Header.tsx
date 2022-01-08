@@ -51,7 +51,7 @@ import { CN, COLOR_BG_BODY, COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, EN, C
 import { addressToEns, shortAddress } from '../util/utils';
 import { useRouter } from 'next/router';
 import { useUpdate } from 'react-use';
-import { onConnect, onDisconnect, selectedAccount } from '../util/web3Modal';
+import { onConnect, onDisconnect, onReconnect, selectedAccount } from '../util/web3Modal';
 
 let search_loot_id: any;
 
@@ -123,6 +123,9 @@ export default function Header(props: any) {
 
   useEffect(() => {
     console.info('--> Header: selectedAccount: ', selectedAccount);
+
+    // Reconnect to wallet while page refresh.
+    if (!selectedAccount) onReconnect();
 
     if (selectedAccount) {
       getUserInfo(selectedAccount, setUserAvatar, setUserNickname, setDefaultPhoto, setIsDisplayPFP);

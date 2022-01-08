@@ -25,7 +25,7 @@ export let web3: Web3;
  */
 function init() {
 
-  console.log("Initializing example");
+  console.log("Initializing web3Modal...");
   // console.log("WalletConnectProvider is", WalletConnectProvider);
   // console.log("Fortmatic is", Fortmatic);
 
@@ -63,7 +63,6 @@ async function fetchAccountData() {
 
   // Get a Web3 instance for the wallet
   web3 = new Web3(provider);
-  // const web3 = new Web3(provider);
   // console.log("Web3 instance is : ", web3);
 
   // Get connected chain id from Ethereum node
@@ -82,19 +81,18 @@ async function fetchAccountData() {
   EventDispatch(connected, '');
   
   // get balance of address
-  const balance = await web3.eth.getBalance(selectedAccount);
-  const ethBalance = web3.utils.fromWei(balance, "ether");
+  // const balance = await web3.eth.getBalance(selectedAccount);
+  // const ethBalance = web3.utils.fromWei(balance, "ether");
   //   const humanFriendlyBalance = parseFloat(ethBalance).toFixed(4);
-  console.log("--> ethBalance : ", ethBalance);
+  // console.log("--> ethBalance : ", ethBalance);
 }
 
 /**
  * Connect wallet button pressed.
  */
 export async function onConnect() {
-
-  console.log("Opening a dialog", web3Modal);
-
+  
+  console.log("Opening connection dialog...", web3Modal);
   try {
     provider = await web3Modal.connect();
     fetchAccountData();
@@ -106,19 +104,17 @@ export async function onConnect() {
   // Subscribe to accounts change
   provider.on("accountsChanged", (accounts: string[]) => {
     console.log('--> accountsChanged : ', accounts);
-    if (accounts.length === 0) {
+    if (accounts.length === 0) { // Disconnect to Metamask the Chrome browser plugin
       onDisconnect();
-    } else {
-      if (provider) {
-        fetchAccountData();
-      }
+    } else { // Switch to another address while there are a few addresses connected to.
+      if (provider) fetchAccountData();
     }
   });
 
   // Subscribe to chainId change
   provider.on("chainChanged", (chainId: number) => {
     console.log('--> chainChanged : ', chainId);
-    // fetchAccountData()
+    // if (provider) fetchAccountData();
   });
 
   // Subscribe to networkId change
@@ -146,10 +142,10 @@ export async function onConnect() {
 export async function onDisconnect() {
   
   console.log("Killing the wallet connection : ", provider);
-  // console.log('--> provider.close : ', provider.close);
 
   // TODO: Which providers have close method?
   // How to disconnect to Metamask and other wallets?
+
   // if (provider.close) {
   //   await provider.close();
 
@@ -161,11 +157,11 @@ export async function onDisconnect() {
   //   provider = null;
   // }
 
-  // TEST CODE
+  // Not really close the connection with wallet.
   web3Modal.clearCachedProvider();
   provider = null;
   
-  // selectedAccount = null;
+  // Set account to origin value.
   selectedAccount = '';
 
   // Notify a disconnect event to Header page.

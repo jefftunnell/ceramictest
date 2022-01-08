@@ -1,11 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Flex } from '@chakra-ui/react'
 import Home from '../pages/Home'
 import Header from '../components/Header'
 import { Footer } from '../components/Common'
-import { onReconnect } from '../util/web3Modal'
 
 const Index: NextPage = (props: any) => {
   // console.info('Index: NextPage = ', props)
@@ -29,10 +28,6 @@ const Index: NextPage = (props: any) => {
   //   // console.info('imageUrl = ', imageUrl)
   //   // console.info('label = ', label)
   // }
-
-  useEffect(() => {
-    onReconnect();
-  }, []);
 
   return (
     <div>

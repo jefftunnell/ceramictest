@@ -8,7 +8,7 @@ import { Footer, PageHead } from "../components/Common";
 import Header from "../components/Header";
 import { connected, JUMP_TO } from "../util/consts";
 import { EventSubscribe } from "../util/EventEmiter";
-import { onReconnect, selectedAccount, web3 } from "../util/web3Modal";
+import { selectedAccount, web3 } from "../util/web3Modal";
 
 let addressList: any = [];
 
@@ -20,11 +20,10 @@ const Template: NextPage = (props: any) => {
   const [isDisplayRank, setIsDisplayRank] = useState('flex');
 
   useEffect(() => {
+    console.log("--> Template : web3 : ", web3);
     console.log("--> Template : selectedAccount : ", selectedAccount);
     
     addressList = [];
-    
-    onReconnect();
 
     if (web3) {
       getAddress();
@@ -37,7 +36,7 @@ const Template: NextPage = (props: any) => {
 
   async function getAddress() {
     let result = await apiAddress();
-    // console.info('--> getAddress = ', result);
+    console.info('--> getAddress = ', result);
 
     if (result) {
       for (let i = 0; i < result.length; i++) {
