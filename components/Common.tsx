@@ -8,7 +8,8 @@ import { MdChat, MdFavoriteBorder, MdRedo, MdShare } from "react-icons/md";
 import Header from "./Header";
 import {
   COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, GRAY_TXT, HOVER_TITLE_1,
-  HOVER_TITLE_2, HOVER_TITLE_3, HOVER_TITLE_4, JUMP_TO} from "../util/consts";
+  HOVER_TITLE_2, HOVER_TITLE_3, HOVER_TITLE_4, JUMP_TO
+} from "../util/consts";
 import Link from 'next/link'
 import { distanceTime, formatTime, shortAddress } from "../util/utils";
 import { FaTwitterSquare } from "react-icons/fa";
@@ -33,6 +34,14 @@ const ICON_WH = 5, ICON_MR = 2, ICON_ML = 10;
 
 // test code
 export const timestamp = '1640181449'; // 2021-12-22 21:57:29
+
+export function CommonButton(button: string, func: any) {
+  return (
+    <Button px={5} colorScheme="blue" variant="solid" borderRadius='28px' _focus={{}} onClick={func}>
+      {button}
+    </Button>
+  )
+}
 
 export function TimeAgo(timestamp: string) {
   return (

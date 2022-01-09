@@ -1,12 +1,13 @@
 import { Center, Flex, Text, Tooltip, useToast } from "@chakra-ui/react"
 import { NextPage } from "next"
+import useTranslation from "next-translate/useTranslation";
 import Link from 'next/link'
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUpdate } from "react-use";
 import { Footer, PageHead } from "../components/Common";
 import Header from "../components/Header";
-import { connected, JUMP_TO } from "../util/consts";
+import { connected, JUMP_TO, w_mobile, w_pc } from "../util/consts";
 import { EventSubscribe } from "../util/EventEmiter";
 import { selectedAccount, web3 } from "../util/web3Modal";
 
@@ -18,11 +19,12 @@ const Template: NextPage = (props: any) => {
   const update = useUpdate();
   const toast = useToast();
   const [isDisplayRank, setIsDisplayRank] = useState('flex');
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     console.log("--> Template : web3 : ", web3);
     console.log("--> Template : selectedAccount : ", selectedAccount);
-    
+
     addressList = [];
 
     if (web3) {
@@ -57,9 +59,11 @@ const Template: NextPage = (props: any) => {
     <Flex direction='column' minHeight='100vh'>
       {PageHead(router)}
       <Center>
-        <Text fontSize={'2xl'}>
-          This a page
-        </Text>
+        <Flex direction='column' w={[w_mobile, w_pc]}>
+          <Text fontSize={'2xl'}>
+            This a page
+          </Text>
+        </Flex>
       </Center>
       <Footer />
     </Flex>
@@ -67,3 +71,4 @@ const Template: NextPage = (props: any) => {
 }
 
 export default Template
+

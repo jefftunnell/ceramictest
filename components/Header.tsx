@@ -47,7 +47,10 @@ import { EventDispatch, EventSubscribe } from '../util/EventEmiter';
 import { AiFillTwitterCircle } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { doVisit, getUserInfo, searchLootByLootId } from '../util/data/api';
-import { CN, COLOR_BG_BODY, COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER, EN, COLOR_GRAY, connected } from '../util/consts';
+import {
+  CN, COLOR_BG_BODY, COLOR_BG_AVATAR, COLOR_BG_POPUP, COLOR_BORDER,
+  EN, COLOR_GRAY, connected, xp, ost
+} from '../util/consts';
 import { addressToEns, shortAddress } from '../util/utils';
 import { useRouter } from 'next/router';
 import { useUpdate } from 'react-use';
@@ -203,14 +206,10 @@ export default function Header(props: any) {
 
   function BeforeConnect() {
     return (
-      <Button w='100%' h={['3.3rem', '2.6rem']} onClick={onConnect}
-        px={5} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
+      <Button h={[10, '2.6rem']} onClick={onConnect} fontSize={['sm', 'md']}
+        px={[3, 5]} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
         Connect Wallet
       </Button>
-      // <Button w='100%' h={['3.3rem', '2.6rem']} onClick={() => { onOpen(); onCloseMenu() }}
-      //   px={5} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
-      //   Connect Wallet
-      // </Button>
     )
   }
 
@@ -229,18 +228,18 @@ export default function Header(props: any) {
   function AfterConnect() {
     return (
       <Menu isLazy id="1">
-        <MenuButton px={3} py={2} border='none'>
+        <MenuButton px={[0, 3]} py={2} border='none'>
           <Flex align='center'>
             <Avatar
               bg={COLOR_BG_AVATAR}
               mr={3}
               // size='sm'
-              w={10} h={10}
+              w={[7, 10]} h={[7, 10]}
               cursor='pointer'
               src={userAvatar}
               name="Unnamed"
             />
-            <Text fontSize='md' mr={3}>{ensName}</Text>
+            <Text fontSize={['sm', 'md']} mr={3}>{ensName}</Text>
             <ChevronDownIcon w={5} h={5} color="gray.400" />
           </Flex>
         </MenuButton>
@@ -425,58 +424,35 @@ export default function Header(props: any) {
           {SearchPrompt}
         </Flex>
 
+        <Flex>
+          <Text mr={10}>{xp}: 0</Text>
+          <Text>{ost}: 0</Text>
+        </Flex>
+
         <Flex align="center">
-          {/* <Link to={{ pathname: '/home', search: 'home' }} >
-            <Text mr={10} fontSize='18px' fontFamily='poppins_semibold'
-              _hover={{ transform: 'scale(1.02)' }} py={1}
-              borderBottomColor={inPage === 1 ? '#0798F8' : ''}
-              borderBottomWidth={inPage === 1 ? '3px' : ''}
-              onClick={() => setInPage(1)} >
-              Loot Show
-            </Text>
-          </Link> */}
-
-          {/* <Link to={{ pathname: '/mypage', search: 'mypage' }} >
-            <Text mr={10} fontSize='18px' fontFamily='poppins_semibold'
-              _hover={{ transform: 'scale(1.02)' }} py={1}
-              borderBottomColor={inPage === 2 ? '#0798F8' : ''}
-              borderBottomWidth={inPage === 2 ? '3px' : ''}
-              onClick={() => setInPage(2)} >
-              My Activities
-            </Text>
-          </Link> */}
-
-          {/* <Button w='100%' h={['3.3rem', '2.6rem']} onClick={() => { onOpen(); onCloseMenu() }}
-            px={5} leftIcon={<MdAccountBalanceWallet />} colorScheme="blue" variant="solid" borderRadius='28px'>
-            Explore
-          </Button> */}
-
-          <Text px={5} py={2} cursor='pointer' mr={10}
-            _hover={{ bg: COLOR_GRAY, borderRadius: '28px', color: 'blue', fontWeight: 'bold' }}>
-            Explore
-          </Text>
-
-          <Flex>
+          <Flex mr={5}>
             {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
           </Flex>
-
-          {/* {SocialMedia("https://twitter.com/LootSwag", FaTwitterSquare)}
-          {SocialMedia("https://discord.gg/6QaRVxfUKx", BsDiscord)} */}
           <Language />
         </Flex>
       </Flex>
 
       {/* FOR MOBILE */}
-      <Flex d={['flex', 'none']} pos="fixed" w="100%" zIndex={88}
-        justify="space-between" align="center" px={8} py={5} boxShadow="md">
-
-        {/* <Link to="/">
-          <Text fontSize='2xl' fontFamily='poppins_bold' _hover={{ transform: 'scale(1.02)' }}>
-            Loot Swag
-          </Text>
-        </Link> */}
+      <Flex d={['flex', 'none']} bg={COLOR_BG_BODY} pos="fixed" w="100%" zIndex={88}
+        justify="space-between" align="center" p={5} boxShadow="md">
 
         <HamburgerIcon w={8} h={8} onClick={onOpenMenu} />
+
+        <Flex fontSize={'sm'}>
+          <Text mr={3}>{xp}: 0</Text>
+          <Text>{ost}: 0</Text>
+        </Flex>
+
+        <Flex align="center">
+          <Flex>
+            {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
+          </Flex>
+        </Flex>
 
         <Drawer
           isOpen={isOpenMenu}
@@ -487,55 +463,14 @@ export default function Header(props: any) {
           <DrawerOverlay />
           <DrawerContent mt='5.8rem'>
             <DrawerCloseButton />
-            {/* <DrawerHeader>Create your account</DrawerHeader> */}
-
             <DrawerBody mt='5rem'>
-              {/* <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<SearchIcon color="gray.300" />}
-                />
-                <Input placeholder="Search address or accounts" />
-              </InputGroup> */}
-
-              {/* <Link to="/" >
-                <Flex mt={10} mb={3} align="center" onClick={onCloseMenu}>
-                  <Icon as={MdHome} w={6} h={6} mr={2} />
-                  <Text fontSize='xl' fontWeight='bold'>Loot Show</Text>
-                </Flex>
-              </Link>
-              <Divider /> */}
-
-              {/* <Link to={{ pathname: '/shopping', search: 'shopping' }} >
-                <Flex mt={6} mb={3} align="center" onClick={onCloseMenu}>
-                  <Icon as={MdAddShoppingCart} w={6} h={6} mr={2} />
-                  <Text fontSize='xl' fontWeight='bold'>Shopping</Text>
-                </Flex>
-              </Link>
-              <Divider /> */}
-
-              {/* <Link to={{ pathname: '/myloot', search: 'myloot' }} >
-                <Flex mt={6} mb={3} align="center" onClick={onCloseMenu}>
-                  <Icon as={MdAccountCircle} w={6} h={6} mr={2} />
-                  <Text fontSize='xl' fontWeight='bold'>My Activities</Text>
-                </Flex>
-              </Link> */}
               <Divider />
-
               <Flex mt='3rem'>
                 {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
               </Flex>
             </DrawerBody>
-
-            {/* <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onCloseMenu}>
-                Cancel
-              </Button>
-              <Button colorScheme="blue">Save</Button>
-            </DrawerFooter> */}
           </DrawerContent>
         </Drawer>
-
       </Flex>
     </div>
   );

@@ -19,3 +19,9 @@ export const CN = '简体中文';
 
 // events
 export const connected = 'connected';
+
+export const xp = 'XP';
+export const ost = 'OS Token';
+
+export const w_mobile = '90vw';
+export const w_pc = '50vw';
