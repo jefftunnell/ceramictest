@@ -78,7 +78,7 @@ const Home: NextPage = (props: any) => {
         <Text mb={2} fontWeight={'bold'}>- Change. 你变得更棒！世界变得更好！。</Text>
         <Text mb={5}>核能发电成为人类的主要能源，避免气候灾难。人类寿命得以延长，生活环境更加健康。</Text>
 
-        <Text my={5} fontSize={'2xl'}>让我们开始一段旅程！ Let's start a journey!</Text>
+        <Text my={5} fontSize={'2xl'}>让我们开始一段旅程！ Let&#39;s start a journey!</Text>
 
         <Accordion id="acc" allowMultiple w={['85vw', '20vw']}>
           <AccordionItem>
