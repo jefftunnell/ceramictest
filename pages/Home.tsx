@@ -59,15 +59,15 @@ const Home: NextPage = (props: any) => {
     return ['', '', '']
   }
 
-  function openStart() {
-    router.push('/Start');
+  function goDashboard() {
+    router.push('/Dashboard');
   }
 
   // ROOT
   return (
     <Center>
       <Flex direction='column' w={[w_mobile, w_pc]}>
-        <Text>{t('before_word')}</Text>
+        <Text mt={20}>{t('before_word')}</Text>
         <Text my={6} fontSize={'2xl'}>{t('question')}</Text>
 
         <Text mb={5} fontSize={'2xl'}>{t('slogan')}</Text>
@@ -94,8 +94,8 @@ const Home: NextPage = (props: any) => {
                   <Text>{ost}: 0</Text>
                 </Flex>
 
-                <Flex mb={6}>{CommonButton('核能工程师 -->', openStart)}</Flex>
-                <Flex mb={6}>{CommonButton('DNA工程师 -->', openStart)}</Flex>
+                <Flex mb={6}>{CommonButton('核能工程师 -->', goDashboard)}</Flex>
+                <Flex mb={6}>{CommonButton('DNA工程师 -->', goDashboard)}</Flex>
               </Flex>
             </AccordionPanel>
           </AccordionItem>
@@ -113,8 +113,8 @@ const Home: NextPage = (props: any) => {
                   <Text>{ost}: 0</Text>
                 </Flex>
 
-                <Flex mb={6}>{CommonButton('核能小学生 -->', openStart)}</Flex>
-                <Flex mb={6}>{CommonButton('DNA小学生-->', openStart)}</Flex>
+                <Flex mb={6}>{CommonButton('核能小学生 -->', goDashboard)}</Flex>
+                <Flex mb={6}>{CommonButton('DNA小学生-->', goDashboard)}</Flex>
               </Flex>
             </AccordionPanel>
           </AccordionItem>

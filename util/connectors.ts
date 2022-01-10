@@ -1,5 +1,3 @@
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { ethers } from "ethers";
 import Web3 from "web3";
 import { infuraKey2, infuraKey1 } from "./keyinfo";
@@ -41,22 +39,6 @@ export function getRpcUrl(index: number) {
       break;
   }
   return RPC_URLS[chain_id_bsc]
-}
-
-export const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 56, 65, 66, 137, 80001, 97, 256]
-});
-
-export var walletconnect = getNewWalletConnectInstance();
-
-export function getNewWalletConnectInstance(): WalletConnectConnector {
-  walletconnect = new WalletConnectConnector({
-    rpc: { 1: RPC_URLS[1] },
-    bridge: "https://bridge.walletconnect.org",
-    qrcode: true,
-    // pollingInterval: POLLING_INTERVAL
-  });
-  return walletconnect;
 }
 
 export const chain_id_eth = 1;

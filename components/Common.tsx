@@ -35,6 +35,18 @@ const ICON_WH = 5, ICON_MR = 2, ICON_ML = 10;
 // test code
 export const timestamp = '1640181449'; // 2021-12-22 21:57:29
 
+export function ShowTabs(tabIndex: number, switchTab: any, whichTab: string, tabTitle: any) {
+  return (
+    <Flex direction='column' align='center'>
+      <Text onClick={() => switchTab(tabIndex)} cursor='pointer' fontSize={18}
+        fontWeight={whichTab === 'flex' ? 'bold' : 'none'}>
+        {tabTitle}
+      </Text>
+      <Image d={whichTab} w={100} h={2} mt={1} src='/line.png' />
+    </Flex>
+  )
+}
+
 export function CommonButton(button: string, func: any) {
   return (
     <Button px={5} colorScheme="blue" variant="solid" borderRadius='28px' _focus={{}} onClick={func}>

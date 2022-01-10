@@ -46,7 +46,7 @@ const Index: NextPage = (props: any) => {
 
       <Flex direction='column' minHeight='100vh'>
         <Header />
-        <Flex height='180px' />
+        <Flex height='80px' />
         <Home {...props.data} />
         <Footer />
       </Flex>

@@ -88,35 +88,6 @@ export default function Header(props: any) {
     setIsOpenMenu(false);
   }
 
-  // AutoConnect
-  const [balance, setBalance] = useState();
-  // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isMobile = false;
-
-  /**
-   * with built-in broswer of wallet app.
-   */
-  // const checkBuiltInBrowser = async () => {
-
-  //   // Be using built-in broswer
-  //   if (isMobile && (window as Record<string, any>).ethereum) {
-  //     const web3 = new Web3(Web3.givenProvider);
-  //     const address = await web3.eth.requestAccounts();
-  //     // currUserAccount = address[0];
-
-  //     // Get balance of the address
-  //     // const balance = await web3.eth.getBalance(currUserAccount);
-  //     // myBalance = formatEther(balance);
-  //     // setBalance(myBalance);
-
-  //   } else { // On desktop or mobile independent browser
-
-  //   }
-  // }
-
-  // checkBuiltInBrowser();
-
-
   async function getENS(address: string) {
     // So slow, need to find new method.
     // let ens = await addressToEns(address);
@@ -251,36 +222,6 @@ export default function Header(props: any) {
           {menuItem('Log out', onDisconnect)}
         </MenuList>
       </Menu>
-
-      // <Flex align="center" bg={COLOR_GRAY} borderRadius='23px' px={4} py={2} cursor='pointer'>
-      // <Flex align="center" px={4} py={2} cursor='pointer'>
-      //   <Popover trigger='hover'>
-      //     <PopoverTrigger>
-      //       <Flex align="center">
-      //         <Avatar
-      //           bg={COLOR_BG_AVATAR}
-      //           mr={3}
-      //           size='sm'
-      //           cursor='pointer'
-      //           src={userAvatar}
-      //           name="Unnamed"
-      //         />
-      //         <Text fontSize='md' mr={1}>{ensName}</Text>
-      //         <ChevronDownIcon w={5} h={5} color="gray.400" />
-      //       </Flex>
-      //     </PopoverTrigger>
-
-      //     <PopoverContent borderColor='#24364E'>
-      //       <PopoverBody >
-      //         <Flex direction='column'>
-      //         <Text fontSize='sm'>Profile</Text>
-      //         <Text fontSize='sm'>Setting</Text>
-      //         <Text fontSize='sm'>All</Text>
-      //         </Flex>
-      //       </PopoverBody>
-      //     </PopoverContent>
-      //   </Popover>
-      // </Flex>
     )
   }
 
@@ -465,8 +406,11 @@ export default function Header(props: any) {
             <DrawerCloseButton />
             <DrawerBody mt='5rem'>
               <Divider />
-              <Flex mt='3rem'>
-                {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
+              <Flex my={10} align={'center'}>
+                <Flex mr={10}>
+                  {selectedAccount ? <AfterConnect /> : <BeforeConnect />}
+                </Flex>
+                <Language />
               </Flex>
             </DrawerBody>
           </DrawerContent>
