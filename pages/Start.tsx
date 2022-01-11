@@ -119,33 +119,44 @@ const Start: NextPage = (props: any) => {
           </Flex>
 
           <Flex d={isPending} direction='column' mt={5} >
-          <Text as='i' mb={5}>社区正在审核的文章，你也可以去投票，通过即可获得奖励。</Text>
+            <Text as='i' mb={5}>社区正在审核的文章，你也可以去投票，通过即可获得奖励。</Text>
             {oneArticle(t('pending'), 1)}
             {oneArticle(t('pending'), 2)}
           </Flex>
 
           <Flex d={isYours} direction='column' mt={5} >
-          <Text as='i' mb={5}>提交自己的成果，社区以DAO的方式审核，通过即可获得奖励。</Text>
+            <Text as='i' mb={5}>提交自己的成果，社区以DAO的方式审核，通过即可获得奖励。</Text>
             {oneArticle(t('yours'), 1)}
             {oneArticle(t('yours'), 2)}
           </Flex>
 
           <Divider my={5} />
 
-          <Flex>
-            <Text mb={5} color={'blue'} cursor={'pointer'} textDecoration={'underline'}>
-              真相视频 - 1
-            </Text>
-            <Text ml={10}>+30 {xp} | +40 {ost}</Text>
+          <Flex d={isPopular} direction='column' mt={5} >
+            <Text as='i' mb={5}>这些是社区以DAO的方式产生的视频</Text>
+            <Flex>
+              <Text mb={5} color={'blue'} cursor={'pointer'} textDecoration={'underline'}>
+                (Popular) 真相视频 - 1
+              </Text>
+              <Text ml={10}>+30 {xp} | +40 {ost}</Text>
+            </Flex>
+
+            <AspectRatio>
+              <iframe
+                title='Worst Nuclear Accidents in History'
+                src='https://www.youtube.com/embed/Jzfpyo-q-RM'
+                allowFullScreen
+              />
+            </AspectRatio>
           </Flex>
 
-          <AspectRatio>
-            <iframe
-              title='Worst Nuclear Accidents in History'
-              src='https://www.youtube.com/embed/Jzfpyo-q-RM'
-              allowFullScreen
-            />
-          </AspectRatio>
+          <Flex d={isPending} direction='column' mt={5} >
+            <Text as='i' mb={5}>还没有正在审核的视频，你可以制作自己的。</Text>
+          </Flex>
+
+          <Flex d={isYours} direction='column' mt={5} >
+            <Text as='i' mb={5}>提交自己的成果，社区以DAO的方式审核，通过即可获得奖励。</Text>
+          </Flex>
 
           <Flex mt={10}>{CommonButton('进入下一关', goLevel2)}</Flex>
         </Flex>
