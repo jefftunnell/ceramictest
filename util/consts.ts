@@ -24,4 +24,4 @@ export const xp = 'XP';
 export const ost = 'OS Token';
 
 export const w_mobile = '90vw';
-export const w_pc = '50vw';
+export const w_pc = '60vw';

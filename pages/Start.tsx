@@ -1,11 +1,11 @@
-import { AspectRatio, Center, Divider, Flex, SimpleGrid, Text, Tooltip, useToast } from "@chakra-ui/react"
+import { AspectRatio, Center, Divider, Flex, SimpleGrid, Spacer, Text, Tooltip, useToast } from "@chakra-ui/react"
 import { NextPage } from "next"
 import useTranslation from "next-translate/useTranslation";
 import Link from 'next/link'
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUpdate } from "react-use";
-import { CommonButton, Footer, PageHead, ShowTabs } from "../components/Common";
+import { CommonButton, Footer, NextButton, PageHead, ShowTabs } from "../components/Common";
 import Header from "../components/Header";
 import { connected, JUMP_TO, ost, w_mobile, w_pc, xp } from "../util/consts";
 import { EventSubscribe } from "../util/EventEmiter";
@@ -80,15 +80,24 @@ const Start: NextPage = (props: any) => {
     }
   }
 
-  function oneArticle(type: string, index: number) {
+  function oneArticle(title: string, level: string, publish: string, dao?: string) {
     return (
-      <Flex>
-        <Text mb={5} color={'blue'} cursor={'pointer'} textDecoration={'underline'}>
-          ({type}) 真相文章 - {index}
+      <Flex direction={'column'}  mb={5} >
+        <Text mb={1} color={'blue'} cursor={'pointer'} textDecoration={'underline'}>
+          {title}
         </Text>
-        <Text ml={10}>+10 {xp} | +20 {ost}</Text>
+        <Flex fontSize={'sm'}>
+          <Text fontWeight={'bold'}>难度: {level}</Text>
+          <Text as='i'  ml={5}>{publish}</Text>
+          <Text ml={10}>+10 {xp} | +20 {ost}</Text>
+          {dao ? <Text ml={10} color={'blue'} cursor={'pointer'} textDecoration={'underline'}>DAO Vote: {dao}</Text> : <></>}
+        </Flex>
       </Flex>
     )
+  }
+
+  function onStart() {
+    router.push('/Start');
   }
 
   // ROOT
@@ -114,20 +123,26 @@ const Start: NextPage = (props: any) => {
 
           <Flex d={isPopular} direction='column' mt={5} >
             <Text as='i' mb={5}>这些是社区以DAO的方式产生的文章</Text>
-            {oneArticle(t('popular'), 1)}
-            {oneArticle(t('popular'), 2)}
+            {oneArticle('核裂变反应原理', 'L1', '科学出版社')}
+            {oneArticle('可控核反应堆原理和设计', 'L2', '国家原子能机构')}
+            {oneArticle('新一代行波核反应堆的发展和应用', 'L3', '国际原子能机构')}
+            {oneArticle('可控热核聚变反应堆的技术障碍和突破', 'L4', '突破能源发展基金会')}
           </Flex>
 
           <Flex d={isPending} direction='column' mt={5} >
             <Text as='i' mb={5}>社区正在审核的文章，你也可以去投票，通过即可获得奖励。</Text>
-            {oneArticle(t('pending'), 1)}
-            {oneArticle(t('pending'), 2)}
+            {oneArticle('热核聚变反应原理', 'L1', '科学出版社', '60/100')}
+            {oneArticle('目前可控核裂变反应堆的缺陷', 'L2', '国际原子能机构', '80/100')}
           </Flex>
 
           <Flex d={isYours} direction='column' mt={5} >
             <Text as='i' mb={5}>提交自己的成果，社区以DAO的方式审核，通过即可获得奖励。</Text>
-            {oneArticle(t('yours'), 1)}
-            {oneArticle(t('yours'), 2)}
+            {oneArticle('热核聚变反应堆研究', 'L1', 'You', '10/100')}
+            <Flex mt={5}>
+              {CommonButton('文章制作教程', onStart)}
+              <Flex ml={10} />
+              {CommonButton('提交文章', onStart)}
+            </Flex>
           </Flex>
 
           <Divider my={5} />
@@ -152,13 +167,23 @@ const Start: NextPage = (props: any) => {
 
           <Flex d={isPending} direction='column' mt={5} >
             <Text as='i' mb={5}>还没有正在审核的视频，你可以制作自己的。</Text>
+            <Flex mt={5}>
+              {CommonButton('视频制作教程', onStart)}
+              <Flex ml={10} />
+              {CommonButton('提交视频', onStart)}
+            </Flex>
           </Flex>
 
           <Flex d={isYours} direction='column' mt={5} >
             <Text as='i' mb={5}>提交自己的成果，社区以DAO的方式审核，通过即可获得奖励。</Text>
+            <Flex mt={5}>
+              {CommonButton('视频制作教程', onStart)}
+              <Flex ml={10} />
+              {CommonButton('提交视频', onStart)}
+            </Flex>
           </Flex>
-
-          <Flex mt={10}>{CommonButton('进入下一关', goLevel2)}</Flex>
+          <Divider my={5} />
+          <Flex mt={10}>{NextButton('Next   : ACT（行动）', goLevel2)}</Flex>
         </Flex>
       </Center>
       <Footer />

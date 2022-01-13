@@ -55,6 +55,14 @@ export function CommonButton(button: string, func: any) {
   )
 }
 
+export function NextButton(button: string, func: any) {
+  return (
+    <Button px={10} py={3} colorScheme="green" variant="solid" borderRadius='28px' _focus={{}} onClick={func}>
+      {button}
+    </Button>
+  )
+}
+
 export function TimeAgo(timestamp: string) {
   return (
     <Text color='#425365' ml={2} title={formatTime(timestamp)}>{distanceTime(timestamp)}</Text>
