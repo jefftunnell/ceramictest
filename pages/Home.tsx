@@ -31,9 +31,9 @@ const Home: NextPage = (props: any) => {
 
     addressList = [];
 
-    // if (web3) {
-    //   getAddress();
-    // }
+    if (web3) {
+      getAddress();
+    }
   }, [selectedAccount]);
 
   EventSubscribe(connected, (data: any) => {
